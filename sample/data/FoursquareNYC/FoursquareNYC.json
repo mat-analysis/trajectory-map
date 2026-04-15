@@ -1,0 +1,94 @@
+{
+   "input": {
+          "train": ["train"],
+          "test": ["test"],
+          "format": "CSV",
+          "loader": "interning"
+   },
+   "idFeature": {
+          "order": 9,
+          "type": "numeric",
+          "text": "tid"
+    },
+   "labelFeature": {
+          "order": 10,
+          "type": "nominal",
+          "text": "label"
+    },
+   "attributes": [
+	    {
+	          "order": 1,
+	          "type": "space2d",
+	          "text": "space",
+              "dependency": "poi",
+	          "comparator": {
+	            "distance": "euclidean",
+	            "maxValue": -1
+	          }
+	    },
+	    {
+	          "order": 2,
+	          "type": "time",
+	          "text": "time",
+	          "comparator": {
+	            "distance": "difference",
+	            "maxValue": -1
+	          }
+	    },
+	    {
+	          "order": 3,
+	          "type": "nominal",
+	          "text": "day",
+	          "comparator": {
+	            "distance": "equals",
+	            "maxValue": -1
+	          }
+	    },
+	    {
+	          "order": 4,
+	          "type": "nominal",
+	          "text": "poi",
+              "dependency": "poi",
+	          "comparator": {
+	            "distance": "equals"
+	          }
+	    },
+	    {
+	          "order": 5,
+	          "type": "nominal",
+	          "text": "type",
+              "dependency": "poi",
+	          "comparator": {
+	            "distance": "equals"
+	          }
+	    },
+	    {
+	          "order": 6,
+	          "type": "nominal",
+	          "text": "root_type",
+              "dependency": "poi",
+	          "comparator": {
+	            "distance": "equals"
+	          }
+	    },
+	    {
+	          "order": 7,
+	          "type": "numeric",
+	          "text": "rating",
+              "dependency": "poi",
+              "weight": 0.5,
+	          "comparator": {
+	            "distance": "diffnotneg",
+	            "maxValue": -1
+	          }
+	    },
+	    {
+	          "order": 8,
+	          "type": "nominal",
+	          "text": "weather",
+	          "comparator": {
+	            "distance": "equals"
+	          }
+	    },
+	]
+}
