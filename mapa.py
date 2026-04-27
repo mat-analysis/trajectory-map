@@ -706,4 +706,5 @@ if __name__ == '__main__':  # Só executa quando rodar o script diretamente
     app.run(debug=True)  # Roda o servidor do Dash em modo debug para desenvolvimento
     
     
-    
+
+# By Pedro Vilbert
