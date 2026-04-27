@@ -27,7 +27,7 @@ EstudandoMathModel/
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/PedroVilbert/FerramentaVisualizacaoMATs
+   git clone https://github.com/mat-analysis/trajectory-map
    cd EstudandoMathModel
    ```
 
