@@ -28,7 +28,7 @@ EstudandoMathModel/
 1. Clone o repositório:
    ```bash
    git clone https://github.com/mat-analysis/trajectory-map
-   cd EstudandoMathModel
+   cd trajectory-map
    ```
 
 2. Instale as dependências:
