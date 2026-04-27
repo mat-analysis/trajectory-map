@@ -136,17 +136,6 @@ def update_map(colunas_selecionadas, json_data, inicio, fim):  # Função que at
     if json_data is not None:
 
         df_base = pd.read_json(StringIO(json_data), orient='split')
-        
-        # DEBUGZIN
-        print("Colunas recebidas:", df_base.columns.tolist())
-
-        print("Linhas logo após read_json:", len(df_base))
-
-        print("Valores únicos da coluna space:")
-        print(df_base["space"].head())
-
-        print("Quantidade de NaN em space:", df_base["space"].isna().sum())
-
 
         # CASO 1 — já tem lat/lon
         if "lat" in df_base.columns and "lon" in df_base.columns:
@@ -182,7 +171,6 @@ def update_map(colunas_selecionadas, json_data, inicio, fim):  # Função que at
             coords = df_base["space"].str.extract(r'(-?\d+\.?\d*)[^0-9\-]+(-?\d+\.?\d*)')
 
             if coords.isna().any().any(): # Se alguma linha não conseguiu extrair coordenadas, mostra aviso e retorna mapa vazio
-                print("Falha ao extrair coordenadas") # DEBUG
                 return go.Figure() # Retorna figura vazia
 
             # Converte para numérico, forçando erros a NaN, e depois remove linhas com NaN
@@ -624,28 +612,22 @@ def selecionar_trajetoria(clickData):
         int ou None: Índice da trajetória selecionada ou None.
     """
     
-    print("DEBUG - clickData recebido:", clickData)  # DEBUG
-    
     # Se clicou no mapa mas não em um ponto de dados válido (clique em área vazia)
     if not clickData or 'points' not in clickData or len(clickData['points']) == 0:
-        print("DEBUG - Clique em área vazia, desselecionando")  # DEBUG
         return None  # Desseleciona
     
     point_data = clickData['points'][0]
-    print("DEBUG - point_data:", point_data)  # DEBUG
     
     # Tenta extrair informação da trajetória do hover text ou do legendgroup
     hover_text = point_data.get('hovertext', '')
     legend_group = point_data.get('legendgroup', '')
     
-    print(f"DEBUG - hover_text: '{hover_text}', legend_group: '{legend_group}'")  # DEBUG
     
     # Tenta extrair o índice de trajetória do legendgroup (formato: "traj5" ou "movelets123")
     if 'traj' in legend_group:
         match = re.search(r'traj(\d+)', legend_group)
         if match:
             traj_index = int(match.group(1))
-            print(f"DEBUG - Encontrado traj_index via legend_group: {traj_index}")  # DEBUG
             return traj_index
     
     # Tenta extrair do hover text (formato: "T.123 p5")
@@ -653,11 +635,9 @@ def selecionar_trajetoria(clickData):
         match = re.search(r'T\.(\d+)', hover_text)
         if match:
             tid = match.group(1)
-            print(f"DEBUG - Encontrado tid via hover_text: {tid}")  # DEBUG
             # Tenta encontrar o índice correspondente ao tid na lista de trajetórias
             return tid
     
-    print("DEBUG - Não conseguiu extrair trajetória")  # DEBUG
     return dash.no_update
 
 # Callback para atualizar os inputs quando uma trajetória é selecionada
@@ -679,11 +659,9 @@ def atualizar_inputs_com_selecao(traj_selecionada, json_data):
         tuple: (novo_inicio, novo_fim)
     """
     
-    print(f"DEBUG - atualizar_inputs_com_selecao chamado com traj_selecionada: {traj_selecionada}")  # DEBUG
     
     if traj_selecionada is None:
         # Desselecionar - volta aos valores padrão
-        print("DEBUG - Desselecionando, voltando para 0-10")  # DEBUG
         if json_data is not None:
             df_base = pd.read_json(StringIO(json_data), orient='split')
             T_local, _ = df2trajectory(
@@ -700,12 +678,10 @@ def atualizar_inputs_com_selecao(traj_selecionada, json_data):
     
     # Se é um inteiro, é um índice direto
     if isinstance(traj_selecionada, int):
-        print(f"DEBUG - Selecionando trajetória índice {traj_selecionada}")  # DEBUG
         return traj_selecionada, traj_selecionada
     
     # Se é uma string, é um tid (id da trajetória)
     if isinstance(traj_selecionada, str):
-        print(f"DEBUG - Procurando índice para tid {traj_selecionada}")  # DEBUG
         # Carrega trajetórias para encontrar o índice correspondente
         if json_data is not None:
             df_base = pd.read_json(StringIO(json_data), orient='split')
@@ -721,12 +697,9 @@ def atualizar_inputs_com_selecao(traj_selecionada, json_data):
         # Procura pelo tid na lista de trajetórias
         for i, traj in enumerate(T_local):
             if str(traj.tid) == str(traj_selecionada):
-                print(f"DEBUG - Encontrado tid {traj_selecionada} no índice {i}")  # DEBUG
+
                 return i, i
-        
-        print(f"DEBUG - Tid {traj_selecionada} não encontrado")  # DEBUG
-    
-    print("DEBUG - PreventUpdate")  # DEBUG
+
     raise dash.exceptions.PreventUpdate
 
 if __name__ == '__main__':  # Só executa quando rodar o script diretamente
